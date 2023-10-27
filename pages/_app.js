@@ -9,6 +9,9 @@ const theme = createTheme({
     navyBlue: {
       main: "#14213d",
     },
+    gray: {
+      main: "#e5e5e5",
+    },
   },
 });
 
@@ -18,7 +21,7 @@ theme.typography.h1 = {
 
 export default function App({ Component, pageProps }) {
   return (
-    <ThemeProvider theme={theme} >
+    <ThemeProvider theme={theme}>
       <Component {...pageProps} />
     </ThemeProvider>
   );

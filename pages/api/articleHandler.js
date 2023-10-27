@@ -1,50 +1,65 @@
 import { MongoClient } from "mongodb";
 
+const MONGODB_URI =
+  "mongodb+srv://ff:v7DAr3pjsDtbNOj0@cluster0.bcrceqb.mongodb.net/backendHandler?retryWrites=true&w=majority";
+const DATABASE_NAME = "backendHandler";
+
 const connectDatabase = async () => {
-  const client = await MongoClient.connect(
-    "mongodb+srv://farhad:farhad40@cluster0.bcrceqb.mongodb.net/backendHandler?retryWrites=true&w=majority"
-  );
-  return client;
+  const client = new MongoClient(MONGODB_URI, {
+    useNewUrlParser: true, // This option is deprecated in recent versions of the MongoDB driver, but it should work with the current version you are using.
+    useUnifiedTopology: true,
+  });
+
+  try {
+    await client.connect();
+    return client;
+  } catch (error) {
+    console.error("Error connecting to the database:", error);
+    throw error;
+  }
 };
-const insertDocument = async (client, ducument) => {
-  const db = client.db();
-  await db.collection("articles").insertOne(ducument);
+
+const insertDocument = async (client, document) => {
+  const db = client.db(DATABASE_NAME);
+  await db.collection("articles").insertOne(document);
 };
 
 export default async function handler(req, res) {
-  if (req.method === "POST") {
-    const [email, title, text, slugs, username, describtion] = req.body;
-    const newData = {
-      email,
-      title,
-      slugs,
-      describtion,
-      text,
-      username,
-    };
+  let client = null;
+  try {
+    if (req.method === "POST") {
+      const { email, title, description, text, slugs } = req.body;
+      const newData = {
+        email,
+        title,
+        description,
+        text,
+        slugs,
+      };
 
-    const client = await connectDatabase();
-    await insertDocument(client, newData);
-    res.status(201).json({ message: "added seccessfuly ", newData });
-  } else if (req.method === "GET") {
-    try {
-      const client = await connectDatabase();
+      client = await connectDatabase();
+      await insertDocument(client, newData);
 
-      const db = client.db();
+      res.status(201).json({ message: "Added successfully", newData });
+    } else if (req.method === "GET") {
+      client = await connectDatabase();
+      const db = client.db(DATABASE_NAME);
       const comments = (
         await db.collection("articles").find().toArray()
       ).reverse();
 
-      res.status(200).json({ message: "get", comments });
-    } catch (error) {
-      console.error("Error:", error);
-      res
-        .status(500)
-        .json({ error: "An error occurred while processing the request" });
-    } finally {
-      client.close();
+      res.status(200).json({ message: "GET", comments });
+    } else {
+      res.status(405).end();
     }
-  } else {
-    res.status(405).end();
+  } catch (error) {
+    console.error("Error:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while processing the request" });
+  } finally {
+    if (client) {
+      await client.close();
+    }
   }
 }
