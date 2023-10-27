@@ -2,6 +2,7 @@ import ClientLayout from "@/components/layout/ClientsLayout";
 import styles from "./addArticle.module.css";
 import React, { useReducer } from "react";
 import { TextField, Box, Button, Paper } from "@mui/material";
+import Topics from "@/components/add-article/Topics";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -14,7 +15,7 @@ const reducer = (state, action) => {
     case "SET_TEXT":
       return { ...state, text: action.payload };
     case "SET_SLUGS":
-      return { ...state, slugs: action.payload };
+      return { ...state, topics: action.payload };
     default:
       return state;
   }
@@ -26,7 +27,7 @@ function Index() {
     title: "",
     description: "",
     text: "",
-    slugs: "",
+    topics: "",
   });
 
   const dispatchEmail = (e) => {
@@ -41,8 +42,9 @@ function Index() {
   const dispatchText = (e) => {
     dispatch({ type: "SET_TEXT", payload: e.target.value });
   };
-  const dispatchSlugs = (e) => {
-    dispatch({ type: "SET_SLUGS", payload: e.target.value });
+  const dispatchTopics = (e) => {
+    console.log(e);
+    dispatch({ type: "SET_SLUGS", payload: e });
   };
   const submitForm = async () => {
     console.log(state);
@@ -105,14 +107,7 @@ function Index() {
             />
           </Box>
           <Box width={1 / 4}>
-            <TextField
-              label="slugs"
-              color="navyBlue"
-              rows={5}
-              fullWidth
-              onChange={dispatchSlugs}
-              value={state.slugs}
-            />
+            <Topics dispatchTopics={dispatchTopics} />
           </Box>
         </Box>
         <Button

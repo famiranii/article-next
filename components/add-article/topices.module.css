@@ -1,0 +1,16 @@
+.topic {
+  display: flex;
+  position: relative;
+}
+
+.fab {
+  position: absolute;
+  right: 3%;
+  top: 10%;
+}
+
+.showSlug{
+  display: flex;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}

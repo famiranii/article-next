@@ -28,13 +28,13 @@ export default async function handler(req, res) {
   let client = null;
   try {
     if (req.method === "POST") {
-      const { email, title, description, text, slugs } = req.body;
+      const { email, title, description, text, topics } = req.body;
       const newData = {
         email,
         title,
         description,
         text,
-        slugs,
+        topics,
       };
 
       client = await connectDatabase();
