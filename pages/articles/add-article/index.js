@@ -1,8 +1,10 @@
 import ClientLayout from "@/components/layout/ClientsLayout";
 import styles from "./addArticle.module.css";
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import { TextField, Box, Button, Paper } from "@mui/material";
 import Topics from "@/components/add-article/Topics";
+import CircularProgress from "@mui/material/CircularProgress";
+import Notification from "@/components/notifications/Notification";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -29,6 +31,7 @@ function Index() {
     text: "",
     topics: "",
   });
+  const [status, setStatus] = useState("none");
 
   const dispatchEmail = (e) => {
     dispatch({ type: "SET_EMAIL", payload: e.target.value });
@@ -47,7 +50,7 @@ function Index() {
     dispatch({ type: "SET_SLUGS", payload: e });
   };
   const submitForm = async () => {
-    console.log(state);
+    setStatus("loading");
     try {
       const response = await fetch("../api/articleHandler", {
         method: "POST",
@@ -58,11 +61,13 @@ function Index() {
       });
       if (response.ok) {
         console.log("POST request was successful");
+        setStatus("success");
       } else {
         console.error("POST request failed");
       }
     } catch (error) {
       console.error("An error occurred while making the POST request", error);
+      setStatus("error");
     }
   };
   return (
@@ -118,7 +123,20 @@ function Index() {
           onClick={submitForm}
         >
           submit
+          {status === "loading" && (
+            <CircularProgress
+              size={20}
+              color="navyBlue"
+              sx={{ marginLeft: 2 }}
+            />
+          )}
         </Button>
+        {status === "success" && (
+          <Notification type={status} text="your article added successfully" />
+        )}
+        {status === "error" && (
+          <Notification type={status} text="we had an error try again" />
+        )}
       </Paper>
     </ClientLayout>
   );
