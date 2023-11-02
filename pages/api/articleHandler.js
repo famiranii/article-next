@@ -6,7 +6,7 @@ const DATABASE_NAME = "backendHandler";
 
 const connectDatabase = async () => {
   const client = new MongoClient(MONGODB_URI, {
-    useNewUrlParser: true, // This option is deprecated in recent versions of the MongoDB driver, but it should work with the current version you are using.
+    useNewUrlParser: true,
     useUnifiedTopology: true,
   });
 
@@ -44,11 +44,11 @@ export default async function handler(req, res) {
     } else if (req.method === "GET") {
       client = await connectDatabase();
       const db = client.db(DATABASE_NAME);
-      const comments = (
+      const articles = (
         await db.collection("articles").find().toArray()
       ).reverse();
 
-      res.status(200).json({ message: "GET", comments });
+      res.status(200).json({ message: "GET", articles });
     } else {
       res.status(405).end();
     }
