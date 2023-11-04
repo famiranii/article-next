@@ -1,6 +1,6 @@
 import React from "react";
 import List from "@mui/material/List";
-import SidebatItem from "./SidebatItem";
+import SidebartItem from "./SidebartItem";
 
 function Sidebar({sideBarItems}) {
   const style = {
@@ -12,7 +12,7 @@ function Sidebar({sideBarItems}) {
   return (
     <List sx={style} component="nav" aria-label="mailbox folders">
       {sideBarItems.map((item, index) => (
-        <SidebatItem key={index} item={item} />
+        <SidebartItem key={index} item={item} />
       ))}
     </List>
   );

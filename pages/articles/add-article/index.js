@@ -60,7 +60,6 @@ function Index() {
         body: JSON.stringify(state),
       });
       if (response.ok) {
-        console.log("POST request was successful");
         setStatus("success");
       } else {
         console.error("POST request failed");
