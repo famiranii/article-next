@@ -1,10 +1,10 @@
 import ClientLayout from "@/components/layout/ClientsLayout";
 import styles from "./addArticle.module.css";
 import React, { useReducer, useState } from "react";
-import { TextField, Box, Button, Paper } from "@mui/material";
+import { TextField, Box, Paper } from "@mui/material";
 import Topics from "@/components/add-article/Topics";
-import CircularProgress from "@mui/material/CircularProgress";
 import Notification from "@/components/notifications/Notification";
+import SubmitBtn from "@/components/buttons/SubmitBtn";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -114,22 +114,8 @@ function Index() {
             <Topics dispatchTopics={dispatchTopics} />
           </Box>
         </Box>
-        <Button
-          variant="contained"
-          sx={{ marginTop: 4 }}
-          size="large"
-          color="yellow"
-          onClick={submitForm}
-        >
-          submit
-          {status === "loading" && (
-            <CircularProgress
-              size={20}
-              color="navyBlue"
-              sx={{ marginLeft: 2 }}
-            />
-          )}
-        </Button>
+        <SubmitBtn status={status} submitForm={submitForm} />
+
         {status === "success" && (
           <Notification type={status} text="your article added successfully" />
         )}
