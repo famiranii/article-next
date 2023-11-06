@@ -58,6 +58,7 @@ export default function Home() {
       });
       if (response.ok) {
         setStatus("success");
+        localStorage.setItem("articlesEmail", state.email);
         router.push("/articles");
       } else {
         console.error("POST request failed");

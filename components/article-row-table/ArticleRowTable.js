@@ -1,7 +1,9 @@
 import { styled } from "@mui/material/styles";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { IconButton } from "@mui/material";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
@@ -12,16 +14,26 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-function ArticleRowTable({row}) {
+function ArticleRowTable({ row, deleteArticle }) {
   return (
     <StyledTableRow key={row.description}>
       <TableCell component="th" scope="row">
         {row.description}
       </TableCell>
-      <TableCell align="right">{row.author}</TableCell>
+      {row.author && <TableCell align="right">{row.author}</TableCell>}
       <TableCell align="right">{row.title}</TableCell>
       <TableCell align="right">{row.topics}</TableCell>
-      <TableCell align="right">{row.text}</TableCell>
+      <TableCell align="right">{row.text}...</TableCell>
+      {deleteArticle && (
+        <TableCell align="right">
+          <IconButton>
+            <EditIcon color="navyBlue" />
+          </IconButton>
+          <IconButton>
+            <DeleteForeverIcon color="error" />
+          </IconButton>
+        </TableCell>
+      )}
     </StyledTableRow>
   );
 }

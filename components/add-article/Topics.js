@@ -5,20 +5,16 @@ import AddIcon from "@mui/icons-material/Add";
 import styles from "./topices.module.css";
 import SingleTopic from "./topic/SingleTopic";
 
-function Topics({ dispatchTopics }) {
-  const [topics, setTopics] = useState([]);
+function Topics({ dispatchTopic, topics, removeTopic }) {
   const [topic, setTopic] = useState("");
 
-  const addSlug = () => {
-    const allTopics = [...topics, topic];
-    setTopics(allTopics);
+  const addTopic = () => {
+    dispatchTopic(topic);
     setTopic("");
-    dispatchTopics(allTopics);
   };
 
   const deleteTopic = (deletedTopic) => {
-    setTopics(topics.filter((topic) => topic !== deletedTopic));
-    dispatchTopics(topics);
+    removeTopic(deletedTopic);
   };
   return (
     <>
@@ -36,7 +32,7 @@ function Topics({ dispatchTopics }) {
           aria-label="add"
           size="small"
           className={styles.fab}
-          onClick={addSlug}
+          onClick={addTopic}
         >
           <AddIcon />
         </Fab>

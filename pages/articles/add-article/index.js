@@ -8,8 +8,6 @@ import SubmitBtn from "@/components/buttons/SubmitBtn";
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "SET_EMAIL":
-      return { ...state, email: action.payload };
     case "SET_TITLE":
       return { ...state, title: action.payload };
     case "SET_DESCRIPTION":
@@ -24,18 +22,19 @@ const reducer = (state, action) => {
 };
 
 function Index() {
+  let initialEmail = "";
+  if (typeof window !== "undefined") {
+    initialEmail = localStorage.getItem("articlesEmail") || "";
+  }
   const [state, dispatch] = useReducer(reducer, {
-    email: "",
+    email: initialEmail || "",
     title: "",
     description: "",
     text: "",
-    topics: "",
+    topics: [],
   });
   const [status, setStatus] = useState("none");
 
-  const dispatchEmail = (e) => {
-    dispatch({ type: "SET_EMAIL", payload: e.target.value });
-  };
   const dispatchTitle = (e) => {
     dispatch({ type: "SET_TITLE", payload: e.target.value });
   };
@@ -45,9 +44,14 @@ function Index() {
   const dispatchText = (e) => {
     dispatch({ type: "SET_TEXT", payload: e.target.value });
   };
-  const dispatchTopics = (e) => {
-    console.log(e);
-    dispatch({ type: "SET_SLUGS", payload: e });
+  const dispatchTopic = (e) => {
+    const topics = state.topics.slice();
+    topics.push(e);
+    dispatch({ type: "SET_SLUGS", payload: topics });
+  };
+  const removeTopic = (deletedTopic) => {
+    const newTopics = state.topics.filter((topic) => topic !== deletedTopic);
+    dispatch({ type: "SET_SLUGS", payload: newTopics });
   };
   const submitForm = async () => {
     setStatus("loading");
@@ -61,6 +65,10 @@ function Index() {
       });
       if (response.ok) {
         setStatus("success");
+        state.title = "";
+        state.description = "";
+        state.text = "";
+        state.topics = [];
       } else {
         console.error("POST request failed");
         setStatus("error");
@@ -76,13 +84,6 @@ function Index() {
         <Box className={styles.form} component="form">
           <Box width={2 / 3}>
             <Box sx={{ display: "flex" }}>
-              <TextField
-                label="email"
-                color="navyBlue"
-                fullWidth
-                onChange={dispatchEmail}
-                value={state.email}
-              />
               <TextField
                 label="title"
                 color="navyBlue"
@@ -112,7 +113,11 @@ function Index() {
             />
           </Box>
           <Box width={1 / 4}>
-            <Topics dispatchTopics={dispatchTopics} />
+            <Topics
+              dispatchTopic={dispatchTopic}
+              topics={state.topics}
+              removeTopic={removeTopic}
+            />
           </Box>
         </Box>
         <SubmitBtn status={status} submitForm={submitForm} />
@@ -121,7 +126,7 @@ function Index() {
           <Notification type={status} text="your article added successfully" />
         )}
         {status === "error" && (
-          <Notification type={status} text="we had an error try again" />
+          <Notification type={status} text="we had an error, try again" />
         )}
       </Paper>
     </ClientLayout>
