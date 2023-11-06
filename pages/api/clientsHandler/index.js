@@ -6,7 +6,7 @@ const insertDocument = async (client, document) => {
   await db.collection("clients").insertOne(document);
 };
 
-export default async function handler(req, res) {
+export default async function clientsHandler(req, res) {
   let client = null;
   try {
     if (req.method === "POST") {

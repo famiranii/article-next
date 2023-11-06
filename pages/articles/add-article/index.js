@@ -63,6 +63,7 @@ function Index() {
         setStatus("success");
       } else {
         console.error("POST request failed");
+        setStatus("error");
       }
     } catch (error) {
       console.error("An error occurred while making the POST request", error);

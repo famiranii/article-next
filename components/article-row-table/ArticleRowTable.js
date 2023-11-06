@@ -14,14 +14,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 function ArticleRowTable({row}) {
   return (
-    <StyledTableRow key={row.name}>
+    <StyledTableRow key={row.description}>
       <TableCell component="th" scope="row">
-        {row.name}
+        {row.description}
       </TableCell>
-      <TableCell align="right">{row.calories}</TableCell>
-      <TableCell align="right">{row.fat}</TableCell>
-      <TableCell align="right">{row.carbs}</TableCell>
-      <TableCell align="right">{row.protein}</TableCell>
+      <TableCell align="right">{row.author}</TableCell>
+      <TableCell align="right">{row.title}</TableCell>
+      <TableCell align="right">{row.topics}</TableCell>
+      <TableCell align="right">{row.text}</TableCell>
     </StyledTableRow>
   );
 }

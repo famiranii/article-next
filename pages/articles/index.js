@@ -20,18 +20,25 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+function createData(description, author, title, topics, text) {
+  return { description, author, title, topics, text };
 }
 
 function Index({ result }) {
-
   const rows = [];
   result.articles.forEach((article) => {
-    const authorArr = article.email.split('@');
+    const authorArr = article.email.split("@");
     const author = authorArr[0];
-    
-    rows.push(createData(article.description,author,article.title,...article.topics,article.text.slice(0,20)));
+
+    rows.push(
+      createData(
+        article.description,
+        author,
+        article.title,
+        ...article.topics,
+        article.text.slice(0, 20)
+      )
+    );
   });
 
   return (
@@ -50,7 +57,7 @@ function Index({ result }) {
             </TableHead>
             <TableBody>
               {rows.map((row) => (
-                <ArticleRowTable key={row.name} row={row} />
+                <ArticleRowTable key={row.title} row={row} />
               ))}
             </TableBody>
           </Table>
@@ -62,7 +69,6 @@ function Index({ result }) {
 
 export async function getStaticProps() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     const response = await fetch(`http://localhost:3000/api/articleHandler`);
     const result = await response.json();
     return {

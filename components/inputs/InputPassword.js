@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-function InputPassword() {
+function InputPassword({ passwordHandler }) {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -23,6 +23,8 @@ function InputPassword() {
         id="standard-adornment-password"
         type={showPassword ? "dence" : "password"}
         margin="dense"
+        autoComplete="off"
+        onChange={(e) => passwordHandler(e.target.value)}
         endAdornment={
           <InputAdornment position="end">
             <IconButton
