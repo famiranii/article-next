@@ -4,6 +4,7 @@ import TableRow from "@mui/material/TableRow";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { IconButton } from "@mui/material";
+import { useRouter } from "next/router";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
@@ -15,8 +16,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 function ArticleRowTable({ row, deleteArticle }) {
+  const router = useRouter();
+  const handleArticleClickّ = () => {
+    router.push(`/articles/${row.title}`);
+  };
   return (
-    <StyledTableRow key={row.description}>
+    <StyledTableRow onClick={handleArticleClickّ} sx={{cursor:"pointer"}}>
       <TableCell component="th" scope="row">
         {row.description}
       </TableCell>

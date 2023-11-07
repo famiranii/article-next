@@ -56,8 +56,8 @@ function Index({ result }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <ArticleRowTable key={row.title} row={row} />
+              {rows.map((row,index) => (
+                <ArticleRowTable key={index} row={row} />
               ))}
             </TableBody>
           </Table>
@@ -78,7 +78,7 @@ export async function getStaticProps() {
     return {
       props: { result: [] },
     };
-  }
+  } 
 }
 
 export default Index;
