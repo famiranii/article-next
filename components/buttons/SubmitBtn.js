@@ -1,10 +1,10 @@
 import React from "react";
-import { Button,CircularProgress } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 
-export default function SubmitBtn({status , submitForm}) {
-
+export default function SubmitBtn({ status, submitForm, disabled }) {
   return (
     <Button
+      disabled={!disabled}
       variant="contained"
       sx={{ marginTop: 4 }}
       size="large"
