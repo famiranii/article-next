@@ -9,7 +9,7 @@ import { Box } from "@mui/material";
 
 const ClientLayout = ({ children }) => {
   const sideBarItems = [
-    { title: "all articles", path: "/articles" },
+    { title: "all articles", path: "/" },
     { title: "add article", path: "/articles/add-article" },
     { title: "your article", path: "/articles/your-article" },
   ];

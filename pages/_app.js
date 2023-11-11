@@ -1,5 +1,6 @@
 import "@/styles/globals.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import MainLayout from "@/components/layout/MainLayout";
 
 const theme = createTheme({
   palette: {
@@ -21,8 +22,10 @@ theme.typography.h1 = {
 
 export default function App({ Component, pageProps }) {
   return (
-    <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <MainLayout>
+      <ThemeProvider theme={theme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </MainLayout>
   );
 }
