@@ -5,70 +5,50 @@ import { TextField, Box, Paper } from "@mui/material";
 import Topics from "@/components/add-article/Topics";
 import Notification from "@/components/notifications/Notification";
 import SubmitBtn from "@/components/buttons/SubmitBtn";
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "SET_TITLE":
-      return { ...state, title: action.payload };
-    case "SET_DESCRIPTION":
-      return { ...state, description: action.payload };
-    case "SET_TEXT":
-      return { ...state, text: action.payload };
-    case "SET_SLUGS":
-      return { ...state, topics: action.payload };
-    default:
-      return state;
-  }
-};
+import AddArticleInput from "@/components/inputs/AddArticleInput";
+import UseForm from "@/components/hook/useForm";
+import { minValidator } from "@/components/validator/Rules";
 
 function Index() {
-  let initialEmail = "";
-  if (typeof window !== "undefined") {
-    initialEmail = localStorage.getItem("articlesEmail") || "";
-  }
-  const [state, dispatch] = useReducer(reducer, {
-    email: initialEmail || "",
-    title: "",
-    description: "",
-    text: "",
-    topics: [],
-  });
   const [status, setStatus] = useState("none");
+  const [topics, setTopics] = useState([]);
+  const [formState, getInputInfo] = UseForm(
+    {
+      title: { value: "", isValid: false },
+      description: { value: "", isValid: false },
+      text: { value: "", isValid: false },
+    },
+    false
+  );
+  console.log(formState);
 
-  const dispatchTitle = (e) => {
-    dispatch({ type: "SET_TITLE", payload: e.target.value });
-  };
-  const dispatchDescription = (e) => {
-    dispatch({ type: "SET_DESCRIPTION", payload: e.target.value });
-  };
-  const dispatchText = (e) => {
-    dispatch({ type: "SET_TEXT", payload: e.target.value });
-  };
-  const dispatchTopic = (e) => {
-    const topics = state.topics.slice();
-    topics.push(e);
-    dispatch({ type: "SET_SLUGS", payload: topics });
+  const dispatchTopic = (topic) => {
+    setTopics([...topics, topic]);
   };
   const removeTopic = (deletedTopic) => {
-    const newTopics = state.topics.filter((topic) => topic !== deletedTopic);
-    dispatch({ type: "SET_SLUGS", payload: newTopics });
+    const newTopics = topics.filter((topic) => topic !== deletedTopic);
+    setTopics(newTopics);
   };
+
   const submitForm = async () => {
     setStatus("loading");
+    const completeForm = {
+      email: localStorage.getItem("articlesEmail"),
+      title: formState.inputValue.title.value,
+      description: formState.inputValue.description.value,
+      text: formState.inputValue.text.value,
+      topics,
+    };
     try {
       const response = await fetch("../api/articleHandler", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(state),
+        body: JSON.stringify(completeForm),
       });
       if (response.ok) {
         setStatus("success");
-        state.title = "";
-        state.description = "";
-        state.text = "";
-        state.topics = [];
       } else {
         console.error("POST request failed");
         setStatus("error");
@@ -83,44 +63,41 @@ function Index() {
       <Paper className={styles.container}>
         <Box className={styles.form} component="form">
           <Box width={2 / 3}>
-            <Box sx={{ display: "flex" }}>
-              <TextField
-                label="title"
-                color="navyBlue"
-                fullWidth
-                onChange={dispatchTitle}
-                value={state.title}
-              />
-            </Box>
-            <TextField
-              label="description"
-              color="navyBlue"
-              fullWidth
-              sx={{ marginY: 4 }}
+            <AddArticleInput
+              id="title"
               minRows={1}
-              multiline
-              onChange={dispatchDescription}
-              value={state.description}
+              placeHolder="minimum length is 10"
+              getInputInfo={getInputInfo}
+              validation={[minValidator(10)]}
             />
-            <TextField
-              label="text"
-              color="navyBlue"
-              fullWidth
+            <AddArticleInput
+              id="description"
+              minRows={1}
+              placeHolder="minimum length is 25"
+              getInputInfo={getInputInfo}
+              validation={[minValidator(25)]}
+            />
+            <AddArticleInput
+              id="text"
               minRows={5}
-              multiline
-              onChange={dispatchText}
-              value={state.text}
+              placeHolder="minimum length is 200"
+              getInputInfo={getInputInfo}
+              validation={[minValidator(200)]}
             />
           </Box>
           <Box width={1 / 4}>
             <Topics
               dispatchTopic={dispatchTopic}
-              topics={state.topics}
+              topics={topics}
               removeTopic={removeTopic}
             />
           </Box>
         </Box>
-        <SubmitBtn status={status} submitForm={submitForm} />
+        <SubmitBtn
+          status={status}
+          submitForm={submitForm}
+          disabled={formState.isFormValid}
+        />
 
         {status === "success" && (
           <Notification type={status} text="your article added successfully" />
