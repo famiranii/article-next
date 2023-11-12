@@ -1,20 +1,17 @@
-import { FormControl, Paper, Box, Grid } from "@mui/material";
+import { FormControl, Paper, Box, Grid, Link } from "@mui/material";
 import styles from "../../styles/Home.module.css";
 import Image from "next/image";
 import SubmitBtn from "@/components/buttons/SubmitBtn";
 import InputPassword from "@/components/inputs/InputPassword";
 import CustomInput from "@/components/inputs/CustomInput";
 import Notification from "@/components/notifications/Notification";
-import {
-  minValidator,
-  emailValidator,
-} from "@/components/validator/Rules";
+import { minValidator, emailValidator } from "@/components/validator/Rules";
 import useForm from "@/components/hook/useForm";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
 export default function Index() {
-  const router = useRouter()
+  const router = useRouter();
   const [status, setStatus] = useState("none");
   const [formState, getInputInfo] = useForm(
     {

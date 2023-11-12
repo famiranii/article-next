@@ -5,13 +5,15 @@ import { useRouter } from 'next/router';
 
 const MainLayout = ({ children }) => {
   const router = useRouter();
-
+  
+  const currentPath = router.pathname;
   useEffect(() => {
     const email = localStorage.getItem('articlesEmail');
-    if (!email) {
-      router.push('/register');
+    if (!email && currentPath !== '/register') {
+      router.push('/login');
     }
-  }, [router]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return <div>{children}</div>;
 };

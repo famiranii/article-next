@@ -1,4 +1,4 @@
-import { FormControl, Paper, Box, Grid } from "@mui/material";
+import { FormControl, Paper, Box, Grid,Link } from "@mui/material";
 import styles from "../../styles/Home.module.css";
 import Image from "next/image";
 import SubmitBtn from "@/components/buttons/SubmitBtn";
@@ -15,7 +15,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 
 export default function Index() {
-  const router = useRouter()
+  const router = useRouter();
   const [status, setStatus] = useState("none");
   const [formState, getInputInfo] = useForm(
     {
@@ -116,6 +116,9 @@ export default function Index() {
                   status={status}
                   disabled={formState.isFormValid}
                 />
+                <Link href="/login" variant="body2" mt={2}>
+                  login page
+                </Link>
               </FormControl>
             </form>
           </Grid>

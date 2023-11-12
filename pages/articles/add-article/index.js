@@ -1,15 +1,17 @@
 import ClientLayout from "@/components/layout/ClientsLayout";
 import styles from "./addArticle.module.css";
-import React, { useReducer, useState } from "react";
-import { TextField, Box, Paper } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Paper } from "@mui/material";
 import Topics from "@/components/add-article/Topics";
 import Notification from "@/components/notifications/Notification";
 import SubmitBtn from "@/components/buttons/SubmitBtn";
 import AddArticleInput from "@/components/inputs/AddArticleInput";
 import UseForm from "@/components/hook/useForm";
 import { minValidator } from "@/components/validator/Rules";
+import { useRouter } from "next/router";
 
 function Index() {
+  const router = useRouter();
   const [status, setStatus] = useState("none");
   const [topics, setTopics] = useState([]);
   const [formState, getInputInfo] = UseForm(
@@ -49,6 +51,7 @@ function Index() {
       });
       if (response.ok) {
         setStatus("success");
+        router.push("/your-article");
       } else {
         console.error("POST request failed");
         setStatus("error");
@@ -61,8 +64,11 @@ function Index() {
   return (
     <ClientLayout>
       <Paper className={styles.container}>
-        <Box className={styles.form} component="form">
-          <Box width={2 / 3}>
+        <Box
+          sx={{ display: { md: "flex" }, justifyContent: "space-between" }}
+          component="form"
+        >
+          <Box sx={{ width: { md: 2 / 3 } }}>
             <AddArticleInput
               id="title"
               minRows={1}
@@ -85,7 +91,7 @@ function Index() {
               validation={[minValidator(200)]}
             />
           </Box>
-          <Box width={1 / 4}>
+          <Box sx={{width:{sm:1/2,md:1/4},mt:2}}>
             <Topics
               dispatchTopic={dispatchTopic}
               topics={topics}

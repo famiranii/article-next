@@ -64,7 +64,7 @@ function Index() {
       createData(
         article.description,
         article.title,
-        ...article.topics,
+        article.topics,
         article.text.slice(0, 20)
       )
     );
@@ -87,10 +87,9 @@ function Index() {
             <TableHead>
               <TableRow>
                 <StyledTableCell>descrption</StyledTableCell>
-                <StyledTableCell align="right">title</StyledTableCell>
-                <StyledTableCell align="right">topics</StyledTableCell>
-                <StyledTableCell align="right">text</StyledTableCell>
-                <StyledTableCell align="right">action</StyledTableCell>
+                <StyledTableCell align="center" width={200}>title</StyledTableCell>
+                <StyledTableCell align="center" width={200}>topics</StyledTableCell>
+                <StyledTableCell align="center">action</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>

@@ -1,46 +1,55 @@
-import { Box, Button, Paper, Typography } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import AppBar from "@mui/material/AppBar";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import Toolbar from "@mui/material/Toolbar";
+import { useRouter } from "next/router";
+import { Box } from "@mui/system";
+import { Button, Paper, Typography } from "@mui/material";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
-const useStyles = makeStyles((theme) => ({
-  header: {
-    width: "100%",
-    padding: theme.spacing(2),
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  logoBox: {
-    display: "flex",
-    alignItems: "center",
-  },
-  buttonBox: {
-    paddingRight: theme.spacing(3),
-  },
-  logoutButton: {
-    color: "#FFFFFF",
-  },
-}));
 
-function Header() {
-  const classes = useStyles();
-
+function Header({ drawerWidth, handleDrawerToggle }) {
+  console.log(drawerWidth);
+  const router = useRouter();
+  const logoutHandler = () => {
+    localStorage.clear("articlesEmail");
+    router.push("/login");
+  };
   return (
     <header>
-      <Paper className={classes.header}>
-        <Box className={classes.logoBox}>
-          <NewspaperIcon color="yellow" sx={{ fontSize: 50 }} />
-          <Typography variant="h1">Articles</Typography>
+      <AppBar
+        sx={{
+          display: "flex",
+          width: { lg: `calc(100% - ${drawerWidth}px)` },
+          ml: { lg: `${drawerWidth}px` },
+        }}
+      >
+        <Box sx={{ display: "flex" }}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { lg: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+          <Box sx={{display:"flex",alignItems:"center",width:"90%",justifyContent:"space-between"}}>
+            <Box sx={{ display: "flex",alignItems:"center" }}>
+              <NewspaperIcon color="yellow" sx={{ fontSize: 50 }} />
+              <Typography variant="h1">Articles</Typography>
+            </Box>
+            <Button
+              variant="contained"
+              color="navyBlue"
+              onClick={logoutHandler}
+            >
+              logout
+            </Button>
+          </Box>
         </Box>
-        <Box className={classes.buttonBox}>
-          <Button
-            variant="contained"
-            color="navyBlue"
-            className={classes.logoutButton}
-          >
-            logout
-          </Button>
-        </Box>
-      </Paper>
+      </AppBar>
     </header>
   );
 }

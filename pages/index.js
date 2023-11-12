@@ -32,11 +32,10 @@ function Index({ result }) {
 
     rows.push(
       createData(
-        article.description,
+        article.description.slice(0, 200),
         author,
         article.title,
-        ...article.topics,
-        article.text.slice(0, 20)
+        article.topics
       )
     );
   });
@@ -45,14 +44,13 @@ function Index({ result }) {
     <ClientLayout>
       <Paper className={styles.container}>
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <Table  aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell>descrption</StyledTableCell>
-                <StyledTableCell align="right">author</StyledTableCell>
-                <StyledTableCell align="right">title</StyledTableCell>
-                <StyledTableCell align="right">topics</StyledTableCell>
-                <StyledTableCell align="right">text</StyledTableCell>
+                <StyledTableCell >descrption</StyledTableCell>
+                <StyledTableCell align="center" width={200}>title</StyledTableCell>
+                <StyledTableCell align="center">author</StyledTableCell>
+                <StyledTableCell align="center" width={200}>topics</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>

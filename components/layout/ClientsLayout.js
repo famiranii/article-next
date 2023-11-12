@@ -1,11 +1,5 @@
 import Sidebar from "@/components/sidebar/Sidebar";
-import dynamic from "next/dynamic";
-
-const Header = dynamic(() => import("../header/Header"), {
-  ssr: false,
-});
-
-import { Box } from "@mui/material";
+import { Box } from "@mui/system";
 
 const ClientLayout = ({ children }) => {
   const sideBarItems = [
@@ -16,10 +10,7 @@ const ClientLayout = ({ children }) => {
   return (
     <div className="layout">
       <Sidebar sideBarItems={sideBarItems} />
-      <Box sx={{ width: 1 }}>
-        <Header />
-        <main>{children}</main>
-      </Box>
+        <Box mt={8} width='100%'>{children}</Box>
     </div>
   );
 };

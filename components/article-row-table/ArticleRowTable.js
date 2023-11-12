@@ -25,12 +25,11 @@ function ArticleRowTable({ row, deleteArticle }) {
       <TableCell component="th" scope="row">
         {row.description}
       </TableCell>
-      {row.author && <TableCell align="right">{row.author}</TableCell>}
-      <TableCell align="right">{row.title}</TableCell>
-      <TableCell align="right">{row.topics}</TableCell>
-      <TableCell align="right">{row.text}...</TableCell>
+      <TableCell align="center">{row.title}</TableCell>
+      {row.author && <TableCell align="center">{row.author}</TableCell>}
+      <TableCell align="center">{row.topics.join(" - ")}</TableCell>
       {deleteArticle && (
-        <TableCell align="right">
+        <TableCell align="center">
           <IconButton>
             <EditIcon color="navyBlue" />
           </IconButton>
