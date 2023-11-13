@@ -8,7 +8,11 @@ function Notification({ type, text }) {
     setOpen(false);
   }, 3000);
   return (
-    <Snackbar open={open} autoHideDuration={6000}>
+    <Snackbar
+      anchorOrigin={{ vertical:'top', horizontal:"center" }}
+      open={open}
+      autoHideDuration={6000}
+    >
       <Alert severity={type} sx={{ width: "100%" }}>
         {text}
       </Alert>

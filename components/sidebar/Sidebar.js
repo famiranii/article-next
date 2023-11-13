@@ -1,20 +1,26 @@
-import * as React from "react";
-import PropTypes from "prop-types";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
-
+import { useState, useEffect } from "react";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import SidebatItem from "./SidebartItem";
 import Header from "../header/Header";
+import { Button, Typography } from "@mui/material";
 
 const drawerWidth = 240;
 
-function ResponsiveDrawer({sideBarItems}) {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+function ResponsiveDrawer({ sideBarItems }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const emailFromStorage = localStorage.getItem("articlesEmail");
+    if (emailFromStorage) {
+      const atIndex = emailFromStorage.indexOf("@");
+      const username = emailFromStorage.slice(0, atIndex);
+      setEmail(username);
+    }
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -22,17 +28,29 @@ function ResponsiveDrawer({sideBarItems}) {
 
   const drawer = (
     <div>
-      <Toolbar />
+      <Typography
+        align="center"
+        p={2}
+        fontSize={22}
+        color="#ffff"
+        bgcolor="#14213d"
+      >
+        {email}
+      </Typography>
+
       <Divider />
-      {sideBarItems.map(item=>(
-        <SidebatItem key={item.title} item={item}/>
+      {sideBarItems.map((item) => (
+        <SidebatItem key={item.title} item={item} />
       ))}
     </div>
   );
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Header drawerWidth={drawerWidth} handleDrawerToggle={handleDrawerToggle}/>
+      <Header
+        drawerWidth={drawerWidth}
+        handleDrawerToggle={handleDrawerToggle}
+      />
       <Box
         component="nav"
         sx={{ width: { lg: drawerWidth }, flexShrink: { lg: 0 } }}

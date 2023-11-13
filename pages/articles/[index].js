@@ -1,6 +1,5 @@
 import ClientLayout from "@/components/layout/ClientsLayout";
 import { Paper, Typography } from "@mui/material";
-import styles from "./articles.module.css";
 import { Box } from "@mui/system";
 
 function Index({ singleArticle }) {
@@ -8,7 +7,14 @@ function Index({ singleArticle }) {
   const topics = article.topics.join(", ");
   return (
     <ClientLayout>
-      <Paper className={styles.container}>
+      <Paper
+        sx={{
+          borderRadius: 2,
+          minHeight: "90vh",
+          p: { xs: 2, md: 4 },
+          m: { sm: 2 },
+        }}
+      >
         <Typography color="#14213d" variant="h4" sx={{ textAlign: "center" }}>
           {article.title}
         </Typography>

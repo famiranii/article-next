@@ -4,7 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import { useRouter } from "next/router";
 import { Box } from "@mui/system";
-import { Button, Paper, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 
 function Header({ drawerWidth, handleDrawerToggle }) {
@@ -41,6 +41,7 @@ function Header({ drawerWidth, handleDrawerToggle }) {
               <Typography variant="h1">Articles</Typography>
             </Box>
             <Button
+            sx={{mr:{xs:2,lg:0}}}
               variant="contained"
               color="navyBlue"
               onClick={logoutHandler}

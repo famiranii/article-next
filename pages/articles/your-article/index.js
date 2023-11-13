@@ -13,7 +13,6 @@ import {
 import { styled } from "@mui/material/styles";
 import ClientLayout from "@/components/layout/ClientsLayout";
 import ArticleRowTable from "@/components/article-row-table/ArticleRowTable";
-import styles from "../articles.module.css";
 import { tableCellClasses } from "@mui/material/TableCell";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -87,8 +86,12 @@ function Index() {
             <TableHead>
               <TableRow>
                 <StyledTableCell>descrption</StyledTableCell>
-                <StyledTableCell align="center" width={200}>title</StyledTableCell>
-                <StyledTableCell align="center" width={200}>topics</StyledTableCell>
+                <StyledTableCell align="center" width={200}>
+                  title
+                </StyledTableCell>
+                <StyledTableCell align="center" width={200}>
+                  topics
+                </StyledTableCell>
                 <StyledTableCell align="center">action</StyledTableCell>
               </TableRow>
             </TableHead>
@@ -108,7 +111,16 @@ function Index() {
   };
   return (
     <ClientLayout>
-      <Paper className={styles.container}>{handleStatus()}</Paper>
+      <Paper
+        sx={{
+          borderRadius: 2,
+          minHeight: "90vh",
+          p: { xs: 2, md: 4 },
+          m: { sm: 2 },
+        }}
+      >
+        {handleStatus()}
+      </Paper>
     </ClientLayout>
   );
 }

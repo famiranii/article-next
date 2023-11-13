@@ -1,6 +1,5 @@
 import ClientLayout from "@/components/layout/ClientsLayout";
 import { Paper } from "@mui/material";
-import styles from "../styles/Home.module.css";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -42,15 +41,26 @@ function Index({ result }) {
 
   return (
     <ClientLayout>
-      <Paper className={styles.container}>
+      <Paper
+        sx={{
+          borderRadius: 2,
+          minHeight: "90vh",
+          p: { xs: 2, md: 4 },
+          m: { sm: 2 },
+        }}
+      >
         <TableContainer component={Paper}>
-          <Table  aria-label="customized table">
+          <Table aria-label="customized table">
             <TableHead>
               <TableRow>
-                <StyledTableCell >descrption</StyledTableCell>
-                <StyledTableCell align="center" width={200}>title</StyledTableCell>
+                <StyledTableCell>descrption</StyledTableCell>
+                <StyledTableCell align="center" width={200}>
+                  title
+                </StyledTableCell>
                 <StyledTableCell align="center">author</StyledTableCell>
-                <StyledTableCell align="center" width={200}>topics</StyledTableCell>
+                <StyledTableCell align="center" width={200}>
+                  topics
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>

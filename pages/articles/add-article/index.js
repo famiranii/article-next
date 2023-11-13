@@ -1,5 +1,4 @@
 import ClientLayout from "@/components/layout/ClientsLayout";
-import styles from "./addArticle.module.css";
 import React, { useState } from "react";
 import { Box, Paper } from "@mui/material";
 import Topics from "@/components/add-article/Topics";
@@ -63,7 +62,14 @@ function Index() {
   };
   return (
     <ClientLayout>
-      <Paper className={styles.container}>
+      <Paper
+        sx={{
+          borderRadius: 2,
+          margin: {sm:2},
+          minHeight: "80vh",
+          padding: 2,
+        }}
+      >
         <Box
           sx={{ display: { md: "flex" }, justifyContent: "space-between" }}
           component="form"
@@ -91,7 +97,7 @@ function Index() {
               validation={[minValidator(200)]}
             />
           </Box>
-          <Box sx={{width:{sm:1/2,md:1/4},mt:2}}>
+          <Box sx={{ width: { sm: 1 / 2, md: 1 / 4 }, mt: 2 }}>
             <Topics
               dispatchTopic={dispatchTopic}
               topics={topics}
