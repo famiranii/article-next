@@ -4,10 +4,7 @@ const MONGODB_URI =
   "mongodb+srv://ff:v7DAr3pjsDtbNOj0@cluster0.bcrceqb.mongodb.net/backendHandler?retryWrites=true&w=majority";
 
 const connectDatabase = async () => {
-  const client = new MongoClient(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  const client = new MongoClient(MONGODB_URI);
 
   try {
     await client.connect();
@@ -17,4 +14,5 @@ const connectDatabase = async () => {
     throw error;
   }
 };
+
 export default connectDatabase;

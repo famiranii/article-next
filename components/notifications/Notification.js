@@ -6,7 +6,7 @@ function Notification({ type, text }) {
   const [open, setOpen] = useState(true);
   setTimeout(() => {
     setOpen(false);
-  }, 3000);
+  }, 4000);
   return (
     <Snackbar
       anchorOrigin={{ vertical:'top', horizontal:"center" }}

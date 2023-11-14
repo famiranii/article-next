@@ -56,6 +56,7 @@ function InputPassword({ getInputInfo, validation }) {
         type={showPassword ? "dence" : "password"}
         margin="dense"
         autoComplete="off"
+        placeholder="more than 7 charector"
         error={!mainInput.isValid}
         onChange={onchangeHandler}
         endAdornment={

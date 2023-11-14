@@ -6,9 +6,6 @@ export default async function loginHandler(req, res) {
   try {
     if (req.method === "POST") {
       const { email, password } = req.body;
-      if (!email || !password) {
-        return res.status(400).json({ error: "Email and password are required" });
-      }
 
       client = await connectDatabase();
       const db = client.db(DATABASE_NAME);
@@ -17,14 +14,18 @@ export default async function loginHandler(req, res) {
       const user = await db.collection("clients").findOne({ email });
 
       if (!user || user.password !== password) {
-        return res.status(401).json({ error: "Invalid email or password" });
+        return res
+          .status(401)
+          .json({
+            error: "Invalid email or password. Please check your credentials.",
+          });
       }
 
       res.status(200).json({ message: "Login successful", user });
     }
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({ error: "An error occurred while processing the request" });
+    res.status(500).json({ error: "we had error to connect mongodb " });
   } finally {
     if (client) {
       await client.close();

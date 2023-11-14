@@ -1,4 +1,4 @@
-import { FormControl, Paper, Box, Grid,Link } from "@mui/material";
+import { FormControl, Paper, Box, Grid, Link } from "@mui/material";
 import styles from "../../styles/Home.module.css";
 import Image from "next/image";
 import SubmitBtn from "@/components/buttons/SubmitBtn";
@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 
 export default function Index() {
   const router = useRouter();
+  const [message, setMessage] = useState("");
   const [status, setStatus] = useState("none");
   const [formState, getInputInfo] = useForm(
     {
@@ -42,16 +43,20 @@ export default function Index() {
         },
         body: JSON.stringify(registerData),
       });
+      const data = await response.json();
       if (response.ok) {
+        setMessage(data.message);
         setStatus("success");
         localStorage.setItem("articlesEmail", registerData.email);
         router.push("/");
       } else {
+        setMessage(data.error)
         console.error("POST request failed");
         setStatus("error");
       }
     } catch (error) {
       console.error("An error occurred while making the POST request", error);
+      setMessage(data.error);
       setStatus("error");
     }
   };
@@ -90,6 +95,7 @@ export default function Index() {
                 <CustomInput
                   id="name"
                   type="text"
+                  placeholder="between 6 and 8 Character"
                   getInputInfo={getInputInfo}
                   validation={[minValidator(6), maxValidator(20)]}
                 />
@@ -97,6 +103,7 @@ export default function Index() {
                   margin="normal"
                   id="email"
                   type="email"
+                  placeholder="email shoul be valid"
                   getInputInfo={getInputInfo}
                   validation={[emailValidator()]}
                 />
@@ -108,6 +115,7 @@ export default function Index() {
                   margin="normal"
                   id="number"
                   type="number"
+                  placeholder="between 8 and 11 Character"
                   getInputInfo={getInputInfo}
                   validation={[minValidator(8), maxValidator(11)]}
                 />
@@ -123,10 +131,10 @@ export default function Index() {
             </form>
           </Grid>
           {status === "success" && (
-            <Notification type={status} text="you signed up successfully" />
+            <Notification type={status} text={message} />
           )}
           {status === "error" && (
-            <Notification type={status} text="there is problem try again" />
+            <Notification type={status} text={message} />
           )}
         </Grid>
       </Paper>

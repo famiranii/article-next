@@ -20,6 +20,10 @@ function ArticleRowTable({ row, deleteArticle }) {
   const handleArticleClickّ = () => {
     router.push(`/articles/${row.title}`);
   };
+  const handleDeleteArticle =(event)=>{
+    event.stopPropagation();
+    deleteArticle(row.title)
+  }
   return (
     <StyledTableRow onClick={handleArticleClickّ} sx={{cursor:"pointer"}}>
       <TableCell component="th" scope="row">
@@ -33,8 +37,8 @@ function ArticleRowTable({ row, deleteArticle }) {
           <IconButton>
             <EditIcon color="navyBlue" />
           </IconButton>
-          <IconButton>
-            <DeleteForeverIcon color="error" />
+          <IconButton onClick={handleDeleteArticle}>
+            <DeleteForeverIcon color="error"/>
           </IconButton>
         </TableCell>
       )}

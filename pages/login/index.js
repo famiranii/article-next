@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 export default function Index() {
   const router = useRouter();
   const [status, setStatus] = useState("none");
+  const [message, setMessage] = useState("");
   const [formState, getInputInfo] = useForm(
     {
       email: { value: "", isValid: false },
@@ -34,16 +35,20 @@ export default function Index() {
         },
         body: JSON.stringify(registerData),
       });
+      const data = await response.json();
       if (response.ok) {
         setStatus("success");
+        setMessage(data.message);
         localStorage.setItem("articlesEmail", registerData.email);
         router.push("/");
       } else {
+        setMessage(data.error);
         console.error("POST request failed");
         setStatus("error");
       }
     } catch (error) {
       console.error("An error occurred while making the POST request", error);
+      setMessage(data.error);
       setStatus("error");
     }
   };
@@ -83,6 +88,7 @@ export default function Index() {
                   margin="normal"
                   id="email"
                   type="email"
+                  placeholder="email should be valid"
                   getInputInfo={getInputInfo}
                   validation={[emailValidator()]}
                 />
@@ -95,14 +101,17 @@ export default function Index() {
                   status={status}
                   disabled={formState.isFormValid}
                 />
+                <Link href="/register" variant="body2" mt={2}>
+                  register page
+                </Link>
               </FormControl>
             </form>
           </Grid>
           {status === "success" && (
-            <Notification type={status} text="login successfull" />
+            <Notification type={status} text={message} />
           )}
           {status === "error" && (
-            <Notification type={status} text="there is problem try again" />
+            <Notification type={status} text={message} />
           )}
         </Grid>
       </Paper>

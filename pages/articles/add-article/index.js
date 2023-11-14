@@ -21,7 +21,6 @@ function Index() {
     },
     false
   );
-  console.log(formState);
 
   const dispatchTopic = (topic) => {
     setTopics([...topics, topic]);
@@ -50,7 +49,7 @@ function Index() {
       });
       if (response.ok) {
         setStatus("success");
-        router.push("/your-article");
+        router.push("/articles/your-article");
       } else {
         console.error("POST request failed");
         setStatus("error");

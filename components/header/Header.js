@@ -8,7 +8,6 @@ import { Button, Typography } from "@mui/material";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 
 function Header({ drawerWidth, handleDrawerToggle }) {
-  console.log(drawerWidth);
   const router = useRouter();
   const logoutHandler = () => {
     localStorage.clear("articlesEmail");

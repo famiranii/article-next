@@ -21,6 +21,7 @@ export default function CustomInput({
   type,
   margin,
   validation,
+  placeholder
 }) {
   const [mainInput, dispatch] = useReducer(inputReducer, {
     value: "",
@@ -43,6 +44,7 @@ export default function CustomInput({
     <>
       <TextField
         error={!mainInput.isValid}
+        placeholder={placeholder}
         id={id}
         label={id}
         type={type}
