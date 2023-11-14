@@ -20,9 +20,10 @@ function AddArticleInput({
   validation,
   getInputInfo,
   placeHolder,
+  inputValue,
 }) {
   const [mainInput, dispatch] = useReducer(inputReducer, {
-    value: "",
+    value: inputValue,
     isValid: true,
   });
   const inputHandler = (e) => {
@@ -42,6 +43,7 @@ function AddArticleInput({
     <TextField
       label={id}
       color="navyBlue"
+      value={inputValue}
       fullWidth
       minRows={minRows}
       multiline

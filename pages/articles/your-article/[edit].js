@@ -9,15 +9,17 @@ import UseForm from "@/components/hook/useForm";
 import { minValidator } from "@/components/validator/Rules";
 import { useRouter } from "next/router";
 
-function Index() {
+function Index({ singleArticle }) {
+  const article = singleArticle[0];
+  console.log(article);
   const router = useRouter();
   const [status, setStatus] = useState("none");
-  const [topics, setTopics] = useState([]);
+  const [topics, setTopics] = useState(article.topics);
   const [formState, getInputInfo] = UseForm(
     {
-      title: { value: "", isValid: false },
-      description: { value: "", isValid: false },
-      text: { value: "", isValid: false },
+      title: { value: article.title, isValid: false },
+      description: { value: article.description, isValid: false },
+      text: { value: article.text, isValid: false },
     },
     false
   );
@@ -32,16 +34,18 @@ function Index() {
 
   const submitForm = async () => {
     setStatus("loading");
+
     const completeForm = {
       email: localStorage.getItem("articlesEmail"),
       title: formState.inputValue.title.value,
       description: formState.inputValue.description.value,
       text: formState.inputValue.text.value,
       topics,
+      id: article._id,
     };
     try {
-      const response = await fetch("../api/articleHandler", {
-        method: "POST",
+      const response = await fetch("../../api/articleHandler", {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -64,7 +68,7 @@ function Index() {
       <Paper
         sx={{
           borderRadius: 2,
-          margin: {sm:2},
+          margin: { sm: 2 },
           minHeight: "85vh",
           padding: 2,
         }}
@@ -75,6 +79,7 @@ function Index() {
         >
           <Box sx={{ width: { md: 2 / 3 } }}>
             <AddArticleInput
+              inputValue={formState.inputValue.title.value}
               id="title"
               minRows={1}
               placeHolder="minimum length is 10"
@@ -82,15 +87,17 @@ function Index() {
               validation={[minValidator(10)]}
             />
             <AddArticleInput
+              inputValue={formState.inputValue.description.value}
               id="description"
-              minRows={3}
+              minRows={2}
               placeHolder="minimum length is 25"
               getInputInfo={getInputInfo}
               validation={[minValidator(25)]}
             />
             <AddArticleInput
+              inputValue={formState.inputValue.text.value}
               id="text"
-              minRows={6}
+              minRows={5}
               placeHolder="minimum length is 200"
               getInputInfo={getInputInfo}
               validation={[minValidator(200)]}
@@ -119,6 +126,43 @@ function Index() {
       </Paper>
     </ClientLayout>
   );
+}
+
+async function fetchData(title) {
+  const response = await fetch(
+    `http://localhost:3000/api/articleHandler/articleByTitle/${title}`
+  );
+
+  if (response.ok) {
+    const data = await response.json();
+    return data.singleArticle || {};
+  } else {
+    const errorMessage = `Failed to fetch data. Status: ${response.status}`;
+    throw new Error(errorMessage);
+  }
+}
+
+export async function getServerSideProps(context) {
+  const title = context.params.edit;
+
+  try {
+    const singleArticle = await fetchData(title);
+
+    if (!singleArticle) {
+      return {
+        notFound: true,
+      };
+    }
+
+    return {
+      props: { singleArticle },
+    };
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      props: { error: error.message },
+    };
+  }
 }
 
 export default Index;

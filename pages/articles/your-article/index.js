@@ -15,6 +15,7 @@ import ClientLayout from "@/components/layout/ClientsLayout";
 import ArticleRowTable from "@/components/article-row-table/ArticleRowTable";
 import { tableCellClasses } from "@mui/material/TableCell";
 import CustomDialog from "@/components/dialog/CustomDialog";
+import { useRouter } from "next/router";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -26,27 +27,26 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-function createData(description, title, topics, text) {
-  return { description, title, topics, text };
+function createData(description, title, topics, text,id) {
+  return { description, title, topics, text,id };
 }
 
 function Index() {
   const [result, setResult] = useState([]);
   const [status, setStatus] = useState("loading");
   const [dialogStatus, setDialogStatus] = useState(false);
-  const [deletedArticleTitle, setDeletedArticleTitle] = useState("");
+  const [deletedArticleId, setDeletedArticleId] = useState("");
+  const router = useRouter();
 
   const fetchData = async () => {
     const email = localStorage.getItem("articlesEmail");
     try {
-      const response = await fetch("../api/articleHandler");
+      const response = await fetch(
+        `../api/articleHandler/articleByEmail/${email}`
+      );
       if (response.ok) {
         const data = await response.json();
-
-        const articlesByEmail = data.articles.filter(
-          (article) => article.email === email
-        );
-        setResult(articlesByEmail);
+        setResult(data.articlesByEmail);
         setStatus("success");
       } else {
         console.error("Failed to fetch data");
@@ -59,7 +59,7 @@ function Index() {
   };
   useEffect(() => {
     fetchData();
-  });
+  },[]);
 
   const rows = [];
   result.forEach((article) => {
@@ -68,18 +68,23 @@ function Index() {
         article.description,
         article.title,
         article.topics,
-        article.text.slice(0, 20)
+        article.text.slice(0, 20),
+        article._id
       )
     );
   });
-  const deleteArticle = async (article) => {
-    setDeletedArticleTitle(article);
+  const deleteArticle = (id) => {
+    setDeletedArticleId(id);
     setDialogStatus(true);
+  };
+  const editArticle = (article) => {
+    console.log('f');
+    router.push(`/articles/your-article/${article}`);
   };
   const onAgree = async () => {
     try {
       const response = await fetch(
-        `../api/articleHandler/${deletedArticleTitle}`,
+        `../api/articleHandler/articleByTitle/${deletedArticleId}`,
         {
           method: "DELETE",
         }
@@ -87,11 +92,11 @@ function Index() {
       const data = await response.json();
       console.log(data);
       fetchData();
+      setStatus("loading");
     } catch (error) {
       console.error("Error fetching article data:", error);
     }
     setDialogStatus(false);
-    setStatus("loading")
   };
   const onDisagree = () => {
     setDialogStatus(false);
@@ -123,9 +128,10 @@ function Index() {
             <TableBody>
               {rows.map((row) => (
                 <ArticleRowTable
-                  key={row.title}
+                  key={row.id}
                   row={row}
                   deleteArticle={deleteArticle}
+                  editArticle={editArticle}
                 />
               ))}
             </TableBody>
@@ -150,7 +156,7 @@ function Index() {
         dialogStatus={dialogStatus}
         onAgree={onAgree}
         onDisagree={onDisagree}
-        text='You can never get back your deleted article'
+        text="You can never get back your deleted article"
       />
     </ClientLayout>
   );

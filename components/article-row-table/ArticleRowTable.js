@@ -15,17 +15,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-function ArticleRowTable({ row, deleteArticle }) {
+function ArticleRowTable({ row, deleteArticle, editArticle }) {
   const router = useRouter();
   const handleArticleClickّ = () => {
     router.push(`/articles/${row.title}`);
   };
-  const handleDeleteArticle =(event)=>{
+  const handleDeleteArticle = (event) => {
     event.stopPropagation();
-    deleteArticle(row.title)
-  }
+    deleteArticle(row.id);
+  };
+  const handleEditArticle = (event) => {
+    event.stopPropagation();
+    editArticle(row.title);
+  };
   return (
-    <StyledTableRow onClick={handleArticleClickّ} sx={{cursor:"pointer"}}>
+    <StyledTableRow onClick={handleArticleClickّ} sx={{ cursor: "pointer" }}>
       <TableCell component="th" scope="row">
         {row.description}
       </TableCell>
@@ -34,11 +38,11 @@ function ArticleRowTable({ row, deleteArticle }) {
       <TableCell align="center">{row.topics.join(" - ")}</TableCell>
       {deleteArticle && (
         <TableCell align="center">
-          <IconButton>
+          <IconButton onClick={handleEditArticle}>
             <EditIcon color="navyBlue" />
           </IconButton>
           <IconButton onClick={handleDeleteArticle}>
-            <DeleteForeverIcon color="error"/>
+            <DeleteForeverIcon color="error" />
           </IconButton>
         </TableCell>
       )}

@@ -49,7 +49,7 @@ function Index({ singleArticle }) {
 }
 
 async function fetchData() {
-  const response = await fetch("http://localhost:3000/api/articleHandler"); // Replace with your API endpoint
+  const response = await fetch("http://localhost:3000/api/articleHandler");
   if (response.ok) {
     const data = await response.json();
     return data.articles;
