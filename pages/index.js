@@ -23,19 +23,20 @@ function createData(description, author, title, topics, text) {
   return { description, author, title, topics, text };
 }
 
-function Index({ result }) {
-  const rows = [];
-  result.articles.forEach((article) => {
+function Index({ result = { articles: [] } }) {
+  if (!result || !result.articles || result.articles.length === 0) {
+    return <div>No articles available.</div>;
+  }
+
+  const rows = result.articles.map((article) => {
     const authorArr = article.email.split("@");
     const author = authorArr[0];
 
-    rows.push(
-      createData(
-        article.description.slice(0, 200),
-        author,
-        article.title,
-        article.topics
-      )
+    return createData(
+      article.description.slice(0, 200),
+      author,
+      article.title,
+      article.topics
     );
   });
 
@@ -84,7 +85,7 @@ export async function getStaticProps() {
     };
   } catch (error) {
     return {
-      props: { result: [] },
+      props: { result: { articles: [] } },
     };
   }
 }
