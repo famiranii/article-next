@@ -50,7 +50,7 @@ function Index({ singleArticle }) {
 
 async function fetchData() {
   if (process.env.NODE_ENV === 'development') {
-    const response = await fetch("http://localhost:3000/article-next/api/articleHandler");
+    const response = await fetch("https://article-next-gold.vercel.app/api/articleHandler");
     if (response.ok) {
       const data = await response.json();
       return data.articles;
