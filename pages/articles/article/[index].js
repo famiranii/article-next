@@ -91,12 +91,12 @@ export async function getStaticProps(context) {
 export async function getStaticPaths() {
   const articles = await fetchData();
 
-  const paths = articles.map((article) => ({
+  const dynamicPaths = articles.map((article) => ({
     params: { index: article.title },
   }));
-  paths.push({ params: { index: [] } });
+
   return {
-    paths,
+    paths: dynamicPaths,
     fallback: "blocking",
   };
 }
