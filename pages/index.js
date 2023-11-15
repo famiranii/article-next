@@ -36,7 +36,7 @@ function Index({ result = { articles: [] } }) {
       article.description.slice(0, 200),
       author,
       article.title,
-      article.topics,
+      article.topics
     );
   });
 
@@ -78,9 +78,11 @@ function Index({ result = { articles: [] } }) {
 
 export async function getStaticProps() {
   try {
-    const response = await fetch(`https://article-next-show.vercel.app/api/articleHandler`);
+    const response = await fetch(
+      `https://article-next-show.vercel.app/api/articleHandler`
+    );
     const result = await response.json();
-    
+
     return {
       props: { result },
     };
@@ -91,5 +93,6 @@ export async function getStaticProps() {
     };
   }
 }
+
 
 export default Index;

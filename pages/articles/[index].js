@@ -49,7 +49,7 @@ function Index({ singleArticle }) {
 }
 
 async function fetchData() {
-  if (process.env.NODE_ENV === "develop") {
+  if (process.env.NODE_ENV === "development") {
     const response = await fetch(
       "https://article-next-show.vercel.app/api/articleHandler"
     );
