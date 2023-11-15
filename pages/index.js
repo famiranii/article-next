@@ -19,8 +19,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-function createData(description, author, title, topics, text) {
-  return { description, author, title, topics, text };
+function createData(description, author, title, topics) {
+  return { description, author, title, topics };
 }
 
 function Index({ result = { articles: [] } }) {
@@ -36,7 +36,7 @@ function Index({ result = { articles: [] } }) {
       article.description.slice(0, 200),
       author,
       article.title,
-      article.topics
+      article.topics,
     );
   });
 
