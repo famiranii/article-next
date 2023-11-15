@@ -77,8 +77,10 @@ function Index({ result = { articles: [] } }) {
 }
 
 export async function getStaticProps() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api/articleHandler';
+
   try {
-    const response = await fetch(`https://article-next-show.vercel.app/api/articleHandler`);
+    const response = await fetch(apiUrl);
     const result = await response.json();
     return {
       props: { result },

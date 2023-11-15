@@ -48,26 +48,26 @@ function Index({ singleArticle }) {
   );
 }
 
-async function fetchData() {
-  if (process.env.NODE_ENV === 'development') {
-    const response = await fetch("https://article-next-show.vercel.app/api/articleHandler");
-    if (response.ok) {
-      const data = await response.json();
-      return data.articles;
-    } else {
-      throw new Error("Failed to fetch data");
-    }
+async function fetchData(apiUrl) {
+  const response = await fetch(apiUrl);
+  if (response.ok) {
+    const data = await response.json();
+    return data.articles;
   } else {
-    return [];
+    throw new Error("Failed to fetch data");
   }
 }
 
 export async function getStaticProps(context) {
+  const apiUrl =
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://article-next-show.vercel.app/api/articleHandler";
+
   try {
-    const articles = await fetchData();
+    const articles = await fetchData(apiUrl);
     const singleArticle = articles.filter(
       (article) => article.title === context.params.index
-    )
+    );
 
     return {
       props: { singleArticle },
@@ -79,7 +79,6 @@ export async function getStaticProps(context) {
     };
   }
 }
-
 export async function getStaticPaths() {
   const articles = await fetchData();
 
@@ -89,7 +88,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: 'blocking',
+    fallback: "blocking",
   };
 }
 
