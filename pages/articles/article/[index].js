@@ -49,7 +49,7 @@ function Index({ singleArticle }) {
 }
 
 async function fetchData() {
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "develop") {
     const response = await fetch(
       "https://article-next-show.vercel.app/api/articleHandler"
     );
@@ -91,12 +91,12 @@ export async function getStaticProps(context) {
 export async function getStaticPaths() {
   const articles = await fetchData();
 
-  const dynamicPaths = articles.map((article) => ({
+  const paths = articles.map((article) => ({
     params: { index: article.title },
   }));
 
   return {
-    paths: dynamicPaths,
+    paths,
     fallback: "blocking",
   };
 }
