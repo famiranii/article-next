@@ -49,14 +49,16 @@ function Index({ singleArticle }) {
 }
 
 async function fetchData() {
-  const response = await fetch(
-    "https://article/api/articleHandler"
-  );
-  if (response.ok) {
-    const data = await response.json();
-    return data.articles;
+  if (process.env.NODE_ENV === 'development') {
+    const response = await fetch("https://article/api/articleHandler");
+    if (response.ok) {
+      const data = await response.json();
+      return data.articles;
+    } else {
+      throw new Error("Failed to fetch data");
+    }
   } else {
-    throw new Error("Failed to fetch data");
+    return [];
   }
 }
 
@@ -65,7 +67,7 @@ export async function getStaticProps(context) {
     const articles = await fetchData();
     const singleArticle = articles.filter(
       (article) => article.title === context.params.index
-    );
+    )
 
     return {
       props: { singleArticle },
@@ -87,7 +89,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: "blocking",
+    fallback: 'blocking',
   };
 }
 
