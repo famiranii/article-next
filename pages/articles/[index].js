@@ -49,8 +49,10 @@ function Index({ singleArticle }) {
 }
 
 async function fetchData() {
-  if (process.env.NODE_ENV === 'deployment') {
-    const response = await fetch("https://article-next-show.vercel.app/api/articleHandler");
+  if (process.env.NODE_ENV === "production") {
+    const response = await fetch(
+      "https://article-next-show.vercel.app/api/articleHandler"
+    );
     if (response.ok) {
       const data = await response.json();
       return data.articles;
@@ -67,7 +69,13 @@ export async function getStaticProps(context) {
     const articles = await fetchData();
     const singleArticle = articles.filter(
       (article) => article.title === context.params.index
-    )
+    );
+
+    if (singleArticle.length === 0) {
+      return {
+        notFound: true,
+      };
+    }
 
     return {
       props: { singleArticle },
@@ -86,10 +94,10 @@ export async function getStaticPaths() {
   const paths = articles.map((article) => ({
     params: { index: article.title },
   }));
-
+  paths.push({ params: { index: [] } });
   return {
     paths,
-    fallback: 'blocking',
+    fallback: "blocking",
   };
 }
 

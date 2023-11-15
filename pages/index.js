@@ -77,17 +77,17 @@ function Index({ result = { articles: [] } }) {
 }
 
 export async function getStaticProps() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://article-next-show.vercel.app/api/articleHandler';
-
   try {
-    const response = await fetch(apiUrl);
+    const response = await fetch(`https://article-next-show.vercel.app/api/articleHandler`);
     const result = await response.json();
+    
     return {
       props: { result },
     };
   } catch (error) {
+    console.error("Error fetching data:", error);
     return {
-      props: { result: { articles: [] } },
+      notFound: true,
     };
   }
 }
