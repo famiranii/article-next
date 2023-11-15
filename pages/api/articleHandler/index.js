@@ -26,9 +26,27 @@ export default async function handler(req, res) {
   let client = null;
   try {
     if (req.method === "POST") {
-      // ... (unchanged)
+      const { email, title, description, text, topics } = req.body;
+      const newData = {
+        email,
+        title,
+        description,
+        text,
+        topics,
+      };
+
+      client = await connectDatabase();
+      await insertDocument(client, newData);
+
+      res.status(201).json({ message: "Added successfully", newData });
     } else if (req.method === "GET") {
-      // ... (unchanged)
+      client = await connectDatabase();
+      const db = client.db(DATABASE_NAME);
+      const articles = (
+        await db.collection("articles").find().toArray()
+      ).reverse();
+
+      res.status(200).json({ message: "GET", articles });
     } else if (req.method === "PUT") {
       const { id, ...updatedArticleData } = req.body;
 
@@ -51,7 +69,11 @@ export default async function handler(req, res) {
         const objectId = new ObjectId(id);
         client = await connectDatabase();
 
-        const result = await updateDocument(client, objectId, updatedArticleData);
+        const result = await updateDocument(
+          client,
+          objectId,
+          updatedArticleData
+        );
 
         if (result.modifiedCount === 1) {
           res.status(200).json({ message: "Article updated successfully" });
