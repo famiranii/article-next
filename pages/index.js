@@ -78,7 +78,7 @@ function Index({ result = { articles: [] } }) {
 
 export async function getStaticProps() {
   try {
-    const response = await fetch(`https://article-next-gold.vercel.app/api/articleHandler`);
+    const response = await fetch(`https://article/api/articleHandler`);
     const result = await response.json();
     return {
       props: { result },

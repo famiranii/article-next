@@ -50,7 +50,7 @@ function Index({ singleArticle }) {
 
 async function fetchData() {
   const response = await fetch(
-    "https://article-next-gold.vercel.app/api/articleHandler"
+    "https://article/api/articleHandler"
   );
   if (response.ok) {
     const data = await response.json();
