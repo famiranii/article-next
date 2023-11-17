@@ -60,7 +60,6 @@ export default async function handler(req, res) {
       let client = null;
 
       try {
-        // Check if the provided id is a valid ObjectId
         if (!ObjectId.isValid(id)) {
           res.status(400).json({ error: "Invalid article id provided" });
           return;

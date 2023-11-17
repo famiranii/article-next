@@ -76,10 +76,13 @@ function Index({ result = { articles: [] } }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   try {
     const response = await fetch(
-      `https://article-next.vercel.app/api/articleHandler`
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/articleHandler`,
+      {
+        method: "GET",
+      }
     );
     const result = await response.json();
 
@@ -93,6 +96,5 @@ export async function getStaticProps() {
     };
   }
 }
-
 
 export default Index;
