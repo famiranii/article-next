@@ -78,7 +78,6 @@ function Index() {
     setDialogStatus(true);
   };
   const editArticle = (article) => {
-    console.log('f');
     router.push(`/articles/your-article/${article}`);
   };
   const onAgree = async () => {
@@ -90,7 +89,6 @@ function Index() {
         }
       );
       const data = await response.json();
-      console.log(data);
       fetchData();
       setStatus("loading");
     } catch (error) {

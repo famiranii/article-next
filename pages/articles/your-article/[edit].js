@@ -130,7 +130,7 @@ function Index({ singleArticle }) {
 
 async function fetchData(title) {
   const response = await fetch(
-    `http://localhost:3000/api/articleHandler/articleByTitle/${title}`
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/articleHandler/articleByTitle/${title}`
   );
 
   if (response.ok) {
