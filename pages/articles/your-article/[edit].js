@@ -138,7 +138,6 @@ async function fetchData(title) {
     return data.singleArticle || {};
   } else {
     const errorMessage = `Failed to fetch data. Status: ${response.status}`;
-    throw new Error(errorMessage);
   }
 }
 
