@@ -50,23 +50,18 @@ function Index({ singleArticle }) {
 
 async function fetchData() {
   try {
-    const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/articleHandler`;
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/articleHandler`);
     
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Fetching data in development mode from:', url);
+    if (response.ok) {
+      const data = await response.json();
+      return data.articles;
+    } else {
+      console.error("Failed to fetch data:", response.status);
+      return [];
     }
-
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch data');
-    }
-
-    const data = await response.json();
-    return data.articles;
   } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
+    console.error("Error fetching data:", error);
+    return [];
   }
 }
 
