@@ -77,6 +77,7 @@ function Index({ result = { articles: [] } }) {
 }
 
 export async function getServerSideProps() {
+  //server
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/articleHandler`,
