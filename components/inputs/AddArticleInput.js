@@ -51,6 +51,7 @@ function AddArticleInput({
       placeholder={placeHolder}
       error={!mainInput.isValid}
       onChange={inputHandler}
+      // onKeyDown={handleEnter}
     />
   );
 }
