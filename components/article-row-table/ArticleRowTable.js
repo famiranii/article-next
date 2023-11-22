@@ -17,12 +17,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-function ArticleRowTable({ row, deleteArticle, editArticle }) {
-  const [isBackdrop, setIsBackdrop] = useState(false);
+function ArticleRowTable({ row, deleteArticle, editArticle, openArticle }) {
   const router = useRouter();
-  const handleArticleClickّ = () => {
+  const handleArticleClick = () => {
+    openArticle();
     router.push(`/articles/${row.title}`);
-    setIsBackdrop(true);
   };
   const handleDeleteArticle = (event) => {
     event.stopPropagation();
@@ -31,10 +30,9 @@ function ArticleRowTable({ row, deleteArticle, editArticle }) {
   const handleEditArticle = (event) => {
     event.stopPropagation();
     editArticle(row.title);
-    setIsBackdrop(true);
   };
   return (
-    <StyledTableRow onClick={handleArticleClickّ} sx={{ cursor: "pointer" }}>
+    <StyledTableRow onClick={handleArticleClick} sx={{ cursor: "pointer" }}>
       <TableCell component="th" scope="row">
         {row.description}
       </TableCell>
@@ -51,7 +49,6 @@ function ArticleRowTable({ row, deleteArticle, editArticle }) {
           </IconButton>
         </TableCell>
       )}
-      <ArticleBackdrop open={isBackdrop} />
     </StyledTableRow>
   );
 }

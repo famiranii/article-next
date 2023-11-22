@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ClientLayout from "@/components/layout/ClientsLayout";
 import ArticleRowTable from "@/components/article-row-table/ArticleRowTable";
 import ArticlePagination from "@/components/pagination/ArticlePagination";
@@ -10,6 +11,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import useArticlePagination from "@/components/hook/useArticlePagination";
+import ArticleBackdrop from "@/components/backdrop/ArticleBackdrop";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -26,11 +28,12 @@ function createData(description, author, title, topics) {
 }
 
 function Index({ result = { articles: [] } }) {
+  const [isBackdrop, setIsBackdrop] = useState(false);
   const totalItems = result.articles.length;
   const [totalPages, currentPage, currentItems, handlePageChange] =
     useArticlePagination({
       totalItems,
-      articles: result.articles
+      articles: result.articles,
     });
 
   const rows = currentItems.map((article) => {
@@ -73,7 +76,11 @@ function Index({ result = { articles: [] } }) {
             </TableHead>
             <TableBody>
               {rows.map((row, index) => (
-                <ArticleRowTable key={index} row={row} />
+                <ArticleRowTable
+                  key={index}
+                  row={row}
+                  openArticle={() => setIsBackdrop(true)}
+                />
               ))}
             </TableBody>
           </Table>
@@ -84,6 +91,7 @@ function Index({ result = { articles: [] } }) {
           setPage={handlePageChange}
         />
       </Paper>
+      <ArticleBackdrop open={isBackdrop}/>
     </ClientLayout>
   );
 }

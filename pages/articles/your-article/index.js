@@ -18,6 +18,7 @@ import { tableCellClasses } from "@mui/material/TableCell";
 import CustomDialog from "@/components/dialog/CustomDialog";
 import { useRouter } from "next/router";
 import ArticlePagination from "@/components/pagination/ArticlePagination";
+import ArticleBackdrop from "@/components/backdrop/ArticleBackdrop";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -34,6 +35,7 @@ function createData(description, title, topics, text, id) {
 }
 
 function Index() {
+  const [isBackdrop, setIsBackdrop] = useState(false);
   const [result, setResult] = useState([]);
   const [totalPages, currentPage, currentItems, handlePageChange] =
     useArticlePagination({
@@ -86,7 +88,11 @@ function Index() {
   };
   const editArticle = (article) => {
     router.push(`/articles/your-article/${article}`);
+    setIsBackdrop(true)
   };
+  const openArticle=()=>{
+    setIsBackdrop(true)
+  }
   const onAgree = async () => {
     try {
       const response = await fetch(
@@ -137,6 +143,7 @@ function Index() {
                     row={row}
                     deleteArticle={deleteArticle}
                     editArticle={editArticle}
+                    openArticle={openArticle}
                   />
                 ))}
               </TableBody>
@@ -169,6 +176,7 @@ function Index() {
         onDisagree={onDisagree}
         text="You can never get back your deleted article"
       />
+      <ArticleBackdrop open={isBackdrop}/>
     </ClientLayout>
   );
 }
