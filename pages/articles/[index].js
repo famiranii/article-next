@@ -1,6 +1,7 @@
 import ClientLayout from "@/components/layout/ClientsLayout";
 import { Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import Comments from "@/components/comments/Comments";
 
 function Index({ singleArticle }) {
   const article = singleArticle[0];
@@ -45,6 +46,7 @@ function Index({ singleArticle }) {
             {article.text}{" "}
           </Typography>
         </Box>
+        <Comments />
       </Paper>
     </ClientLayout>
   );
