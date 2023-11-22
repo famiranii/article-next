@@ -5,6 +5,7 @@ import { Box } from "@mui/system";
 function Index({ singleArticle }) {
   const article = singleArticle[0];
   const topics = article.topics.join(", ");
+  console.log(article.text);
   return (
     <ClientLayout>
       <Paper
@@ -41,7 +42,9 @@ function Index({ singleArticle }) {
         <hr />
         <br />
         <Box>
-          <Typography variant="subtitle1">{article.text} </Typography>
+          <Typography variant="subtitle1" style={{ whiteSpace: "pre-line" }}>
+            {article.text}{" "}
+          </Typography>
         </Box>
       </Paper>
     </ClientLayout>
@@ -50,8 +53,10 @@ function Index({ singleArticle }) {
 
 async function fetchData() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/articleHandler`);
-    
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/articleHandler`
+    );
+
     if (response.ok) {
       const data = await response.json();
       return data.articles;
@@ -64,7 +69,6 @@ async function fetchData() {
     return [];
   }
 }
-
 
 export async function getStaticProps(context) {
   try {
