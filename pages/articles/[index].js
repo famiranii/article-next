@@ -5,7 +5,6 @@ import { Box } from "@mui/system";
 function Index({ singleArticle }) {
   const article = singleArticle[0];
   const topics = article.topics.join(", ");
-  console.log(article.text);
   return (
     <ClientLayout>
       <Paper
