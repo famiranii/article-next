@@ -43,7 +43,7 @@ function Index({ singleArticle }) {
         <br />
         <Box>
           <Typography variant="subtitle1" sx={{ whiteSpace: "pre-line" }}>
-            {article.text}{" "}
+            {article.text}
           </Typography>
         </Box>
         <Comments />

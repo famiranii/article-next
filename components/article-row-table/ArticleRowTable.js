@@ -5,6 +5,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { IconButton } from "@mui/material";
 import { useRouter } from "next/router";
+import ArticleBackdrop from "../backdrop/ArticleBackdrop";
+import { useState } from "react";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
@@ -16,9 +18,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 function ArticleRowTable({ row, deleteArticle, editArticle }) {
+  const [isBackdrop, setIsBackdrop] = useState(false);
   const router = useRouter();
   const handleArticleClickّ = () => {
     router.push(`/articles/${row.title}`);
+    setIsBackdrop(true);
   };
   const handleDeleteArticle = (event) => {
     event.stopPropagation();
@@ -27,6 +31,7 @@ function ArticleRowTable({ row, deleteArticle, editArticle }) {
   const handleEditArticle = (event) => {
     event.stopPropagation();
     editArticle(row.title);
+    setIsBackdrop(true);
   };
   return (
     <StyledTableRow onClick={handleArticleClickّ} sx={{ cursor: "pointer" }}>
@@ -46,6 +51,7 @@ function ArticleRowTable({ row, deleteArticle, editArticle }) {
           </IconButton>
         </TableCell>
       )}
+      <ArticleBackdrop open={isBackdrop} />
     </StyledTableRow>
   );
 }
