@@ -41,8 +41,8 @@ function Index({ singleArticle }) {
         <hr />
         <br />
         <Box>
-          <Typography variant="subtitle1" style={{ whiteSpace: "pre-line" }}>
-            {article.text}
+          <Typography variant="subtitle1" sx={{ whiteSpace: "pre-line" }}>
+            {article.text}{" "}
           </Typography>
         </Box>
       </Paper>
