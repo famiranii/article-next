@@ -1,4 +1,6 @@
 import ClientLayout from "@/components/layout/ClientsLayout";
+import ArticleRowTable from "@/components/article-row-table/ArticleRowTable";
+import ArticlePagination from "@/components/pagination/ArticlePagination";
 import { Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -7,7 +9,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import ArticleRowTable from "@/components/article-row-table/ArticleRowTable";
+import useArticlePagination from "@/components/hook/useArticlePagination";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -24,11 +26,14 @@ function createData(description, author, title, topics) {
 }
 
 function Index({ result = { articles: [] } }) {
-  if (!result || !result.articles || result.articles.length === 0) {
-    return <div>No articles available.</div>;
-  }
+  const totalItems = result.articles.length;
+  const [totalPages, currentPage, currentItems, handlePageChange] =
+    useArticlePagination({
+      totalItems,
+      articles: result.articles
+    });
 
-  const rows = result.articles.map((article) => {
+  const rows = currentItems.map((article) => {
     const authorArr = article.email.split("@");
     const author = authorArr[0];
 
@@ -39,13 +44,15 @@ function Index({ result = { articles: [] } }) {
       article.topics
     );
   });
-
+  if (!result || !result.articles || result.articles.length === 0) {
+    return <div>No articles available.</div>;
+  }
   return (
     <ClientLayout>
       <Paper
         sx={{
           borderRadius: 2,
-          minHeight: "90vh",
+          minHeight: "80vh",
           p: { xs: 2, md: 4 },
           m: { sm: 2 },
         }}
@@ -71,6 +78,11 @@ function Index({ result = { articles: [] } }) {
             </TableBody>
           </Table>
         </TableContainer>
+        <ArticlePagination
+          page={currentPage}
+          totalPages={totalPages}
+          setPage={handlePageChange}
+        />
       </Paper>
     </ClientLayout>
   );

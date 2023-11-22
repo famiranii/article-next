@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import useArticlePagination from "@/components/hook/useArticlePagination";
 import {
   Paper,
   Table,
@@ -16,6 +17,7 @@ import ArticleRowTable from "@/components/article-row-table/ArticleRowTable";
 import { tableCellClasses } from "@mui/material/TableCell";
 import CustomDialog from "@/components/dialog/CustomDialog";
 import { useRouter } from "next/router";
+import ArticlePagination from "@/components/pagination/ArticlePagination";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -27,12 +29,17 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-function createData(description, title, topics, text,id) {
-  return { description, title, topics, text,id };
+function createData(description, title, topics, text, id) {
+  return { description, title, topics, text, id };
 }
 
 function Index() {
   const [result, setResult] = useState([]);
+  const [totalPages, currentPage, currentItems, handlePageChange] =
+    useArticlePagination({
+      totalItems: result.length,
+      articles: result,
+    });
   const [status, setStatus] = useState("loading");
   const [dialogStatus, setDialogStatus] = useState(false);
   const [deletedArticleId, setDeletedArticleId] = useState("");
@@ -59,10 +66,10 @@ function Index() {
   };
   useEffect(() => {
     fetchData();
-  },[]);
+  }, []);
 
   const rows = [];
-  result.forEach((article) => {
+  currentItems.forEach((article) => {
     rows.push(
       createData(
         article.description,
@@ -88,7 +95,6 @@ function Index() {
           method: "DELETE",
         }
       );
-      const data = await response.json();
       fetchData();
       setStatus("loading");
     } catch (error) {
@@ -109,32 +115,39 @@ function Index() {
       return <Alert severity="warning">you dont have any article</Alert>;
     } else {
       return (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 700 }} aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>descrption</StyledTableCell>
-                <StyledTableCell align="center" width={200}>
-                  title
-                </StyledTableCell>
-                <StyledTableCell align="center" width={200}>
-                  topics
-                </StyledTableCell>
-                <StyledTableCell align="center">action</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <ArticleRowTable
-                  key={row.id}
-                  row={row}
-                  deleteArticle={deleteArticle}
-                  editArticle={editArticle}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>descrption</StyledTableCell>
+                  <StyledTableCell align="center" width={200}>
+                    title
+                  </StyledTableCell>
+                  <StyledTableCell align="center" width={200}>
+                    topics
+                  </StyledTableCell>
+                  <StyledTableCell align="center">action</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <ArticleRowTable
+                    key={row.id}
+                    row={row}
+                    deleteArticle={deleteArticle}
+                    editArticle={editArticle}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <ArticlePagination
+            totalPages={totalPages}
+            setPage={handlePageChange}
+            page={currentPage}
+          />
+        </>
       );
     }
   };
