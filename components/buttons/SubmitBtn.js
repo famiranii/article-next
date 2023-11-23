@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, CircularProgress } from "@mui/material";
 
-export default function SubmitBtn({ status, submitForm, disabled }) {
+export default function SubmitBtn({ status, submitForm, disabled, text }) {
   return (
     <Button
       disabled={!disabled}
@@ -11,7 +11,7 @@ export default function SubmitBtn({ status, submitForm, disabled }) {
       color="yellow"
       onClick={submitForm}
     >
-      submit
+      {text ? text : "submit"}
       {status === "loading" && (
         <CircularProgress size={20} color="navyBlue" sx={{ marginLeft: 2 }} />
       )}

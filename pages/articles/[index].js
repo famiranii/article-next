@@ -16,37 +16,41 @@ function Index({ singleArticle }) {
           m: { sm: 2 },
         }}
       >
-        <Typography color="#14213d" variant="h4" sx={{ textAlign: "center" }}>
-          {article.title}
-        </Typography>
-        <br />
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography sx={{ color: "#939393" }} variant="p">
-            author email: &nbsp;
+        <Box border={1} p={4} borderColor="#939393">
+          <Typography color="#14213d" variant="h4" sx={{ textAlign: "center" }}>
+            {article.title}
           </Typography>
-          <Typography>{article.email} </Typography>
+          <br />
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography sx={{ color: "#939393" }} variant="p">
+              author email: &nbsp;
+            </Typography>
+            <Typography>{article.email} </Typography>
+          </Box>
+          <br />
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography sx={{ color: "#939393" }} variant="p">
+              topics: &nbsp;
+            </Typography>
+            <Typography>{topics} </Typography>
+          </Box>
+          <br />
+          <Box>
+            <Typography sx={{ color: "#939393" }}>
+              description: &nbsp;
+            </Typography>
+            <Typography>{article.description} </Typography>
+          </Box>
+          <br />
+          <hr />
+          <br />
+          <Box>
+            <Typography variant="subtitle1" sx={{ whiteSpace: "pre-line" }}>
+              {article.text}
+            </Typography>
+          </Box>
         </Box>
-        <br />
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography sx={{ color: "#939393" }} variant="p">
-            topics: &nbsp;
-          </Typography>
-          <Typography>{topics} </Typography>
-        </Box>
-        <br />
-        <Box>
-          <Typography sx={{ color: "#939393" }}>description: &nbsp;</Typography>
-          <Typography>{article.description} </Typography>
-        </Box>
-        <br />
-        <hr />
-        <br />
-        <Box>
-          <Typography variant="subtitle1" sx={{ whiteSpace: "pre-line" }}>
-            {article.text}
-          </Typography>
-        </Box>
-        <Comments />
+        <Comments id={article._id} />
       </Paper>
     </ClientLayout>
   );

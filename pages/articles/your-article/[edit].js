@@ -11,7 +11,6 @@ import { useRouter } from "next/router";
 
 function Index({ singleArticle }) {
   const article = singleArticle[0];
-  console.log(article);
   const router = useRouter();
   const [status, setStatus] = useState("none");
   const [topics, setTopics] = useState(article.topics);

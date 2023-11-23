@@ -1,6 +1,7 @@
 import connectDatabase from "@/components/connectMongodb/connectMongodb";
-const DATABASE_NAME = "backendHandler";
 import { ObjectId } from "mongodb";
+
+const DATABASE_NAME = "backendHandler";
 
 const insertDocument = async (client, document) => {
   const db = client.db(DATABASE_NAME);
@@ -11,90 +12,84 @@ const updateDocument = async (client, objectId, updatedData) => {
   const db = client.db(DATABASE_NAME);
 
   const filter = { _id: objectId };
-
   const update = {
     $set: updatedData,
   };
 
-  // Perform the update
-  const result = await db.collection("articles").updateOne(filter, update);
+  return db.collection("articles").updateOne(filter, update);
+};
 
-  return result;
+const handleErrors = (res, statusCode, errorMessage) => {
+  res.status(statusCode).json({ error: errorMessage });
 };
 
 export default async function handler(req, res) {
   let client = null;
+
   try {
+    client = await connectDatabase();
+
     if (req.method === "POST") {
       const { email, title, description, text, topics } = req.body;
-      const newData = {
-        email,
-        title,
-        description,
-        text,
-        topics,
-      };
+      const newData = { email, title, description, text, topics };
 
-      client = await connectDatabase();
       await insertDocument(client, newData);
-
       res.status(201).json({ message: "Added successfully", newData });
     } else if (req.method === "GET") {
-      client = await connectDatabase();
-      const db = client.db(DATABASE_NAME);
-      const articles = (
-        await db.collection("articles").find().toArray()
-      ).reverse();
-
+      const articles = (await client.db(DATABASE_NAME).collection("articles").find().toArray()).reverse();
       res.status(200).json({ message: "GET", articles });
+    } else if (req.method === "PATCH") {
+      const { articleId, comment, email } = req.body;
+
+      if (!articleId || !comment || !email) {
+        handleErrors(res, 400, "Bad Request. Please provide articleId, comment, and email in the request body.");
+      } else {
+        const result = await client.db(DATABASE_NAME).collection("articles").updateOne(
+          { _id: new ObjectId(articleId) },
+          {
+            $push: {
+              comments: {
+                text: comment,
+                email: email,
+                createdAt: new Date(),
+              },
+            },
+          }
+        );
+
+        if (result.modifiedCount === 1) {
+          res.status(200).json({ message: "Comment added successfully" });
+        } else {
+          res.status(404).json({ error: "Article not found" });
+        }
+      }
     } else if (req.method === "PUT") {
       const { id, ...updatedArticleData } = req.body;
 
       if (!id || !updatedArticleData) {
-        res.status(400).json({
-          error: "Bad Request. Please provide article id and update data.",
-        });
+        handleErrors(res, 400, "Bad Request. Please provide article id and update data.");
         return;
       }
 
-      let client = null;
-
-      try {
-        if (!ObjectId.isValid(id)) {
-          res.status(400).json({ error: "Invalid article id provided" });
-          return;
-        }
-
-        const objectId = new ObjectId(id);
-        client = await connectDatabase();
-
-        const result = await updateDocument(
-          client,
-          objectId,
-          updatedArticleData
-        );
-
-        if (result.modifiedCount === 1) {
-          res.status(200).json({ message: "Article updated successfully" });
-        } else {
-          res.status(404).json({ error: "Article not found" });
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        res
-          .status(500)
-          .json({ error: "An error occurred while processing the request" });
-      } finally {
-        if (client) {
-          await client.close();
-        }
+      if (!ObjectId.isValid(id)) {
+        handleErrors(res, 400, "Invalid article id provided");
+        return;
       }
+
+      const objectId = new ObjectId(id);
+      const result = await updateDocument(client, objectId, updatedArticleData);
+
+      if (result.modifiedCount === 1) {
+        res.status(200).json({ message: "Article updated successfully" });
+      } else {
+        res.status(404).json({ error: "Article not found" });
+      }
+    } else {
+      res.status(405).end();
     }
   } catch (error) {
     console.error("Error:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while processing the request" });
+    res.status(500).json({ error: "An error occurred while processing the request" });
   } finally {
     if (client) {
       await client.close();

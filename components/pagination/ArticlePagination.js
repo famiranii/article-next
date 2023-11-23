@@ -5,7 +5,6 @@ import Stack from "@mui/material/Stack";
 export default function ArticlePagination({page,totalPages,setPage}) {
   const handleChange = (event, value) => {
     setPage(value);
-    console.log(value);
   };
   return (
     <Stack spacing={1} mt={2} sx={{display:"flex",alignItems:"center"}}>
