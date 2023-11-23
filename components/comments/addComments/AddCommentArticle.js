@@ -6,11 +6,11 @@ import { minValidator } from "../../validator/Rules";
 import UseForm from "../../hook/useForm";
 import { Paper } from "@mui/material";
 
-function AddCommentArticle({ id }) {
+function AddCommentArticle({ id,addComment }) {
   const [status, setStatus] = useState("none");
   const [formState, getInputInfo] = UseForm(
     {
-      comment: { value: "", isValid: false },
+      text: { value: "", isValid: false },
     },
     false
   );
@@ -18,10 +18,10 @@ function AddCommentArticle({ id }) {
     setStatus("loading");
     const completeForm = {
       email: localStorage.getItem("articlesEmail"),
-      comment: formState.inputValue.comment.value,
+      text: formState.inputValue.text.value,
       articleId: id,
+      createdAt: new Date(),
     };
-    console.log(completeForm);
     try {
       const response = await fetch(
         "../../../api/articleHandler",
@@ -35,6 +35,7 @@ function AddCommentArticle({ id }) {
       );
       if (response.ok) {
         setStatus("success");
+        addComment(completeForm)
       } else {
         console.error("POST request failed");
         setStatus("error");
@@ -47,7 +48,7 @@ function AddCommentArticle({ id }) {
   return (
     <Paper elevation={3} sx={{ p: 2, bgcolor: "#f8f8f8" }}>
       <AddArticleInput
-        id="comment"
+        id="text"
         minRows={2}
         placeHolder="minimum length is 10"
         getInputInfo={getInputInfo}

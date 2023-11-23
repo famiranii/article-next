@@ -1,11 +1,16 @@
 import ClientLayout from "@/components/layout/ClientsLayout";
-import { Paper, Typography } from "@mui/material";
+import { Paper, Typography, Alert } from "@mui/material";
 import { Box } from "@mui/system";
 import Comments from "@/components/comments/Comments";
+import { useState } from "react";
 
 function Index({ singleArticle }) {
   const article = singleArticle[0];
   const topics = article.topics.join(", ");
+  const [comments, setComments] = useState(article.comments);
+  const addNewComment = (comment) => {
+    setComments([comment, ...comments]);
+  };
   return (
     <ClientLayout>
       <Paper
@@ -50,7 +55,15 @@ function Index({ singleArticle }) {
             </Typography>
           </Box>
         </Box>
-        <Comments id={article._id} />
+        <Comments
+          id={article._id}
+          comments={comments}
+          addNewComment={addNewComment}
+        />
+        {article?.comments?.length === 0 ||
+          (!article.comments && (
+            <Alert severity="warning">there isn&apos;t any comments</Alert>
+          ))}
       </Paper>
     </ClientLayout>
   );

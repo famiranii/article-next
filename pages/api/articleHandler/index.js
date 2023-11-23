@@ -39,9 +39,9 @@ export default async function handler(req, res) {
       const articles = (await client.db(DATABASE_NAME).collection("articles").find().toArray()).reverse();
       res.status(200).json({ message: "GET", articles });
     } else if (req.method === "PATCH") {
-      const { articleId, comment, email } = req.body;
+      const { articleId, text, email,createdAt } = req.body;
 
-      if (!articleId || !comment || !email) {
+      if (!articleId || !text || !email) {
         handleErrors(res, 400, "Bad Request. Please provide articleId, comment, and email in the request body.");
       } else {
         const result = await client.db(DATABASE_NAME).collection("articles").updateOne(
@@ -49,9 +49,9 @@ export default async function handler(req, res) {
           {
             $push: {
               comments: {
-                text: comment,
-                email: email,
-                createdAt: new Date(),
+                text,
+                email,
+                createdAt,
               },
             },
           }
