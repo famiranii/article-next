@@ -24,7 +24,7 @@ function AddArticleInput({
 }) {
   const [mainInput, dispatch] = useReducer(inputReducer, {
     value: inputValue,
-    isValid: true,
+    isValid: false,
   });
   const inputHandler = (e) => {
     dispatch({
